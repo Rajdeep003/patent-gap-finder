@@ -1,72 +1,67 @@
 # 📄 Patent Gap Finder
 
-An MCP server that analyzes research papers and identifies **patentable opportunities** before someone else does.
+An MCP-based system that analyzes research papers and helps identify **potential patent opportunities** before they are missed.
 
 ---
 
 ## 🚀 Overview
 
-Researchers and developers often create innovative solutions without realizing their patent potential — or worse, reinvent ideas that already exist.
+While working on research or projects, many innovations go unnoticed from a patent perspective — or developers unknowingly build something that already exists.
 
-**Patent Gap Finder** solves this by:
+**Patent Gap Finder** is designed to bridge that gap by:
 
-* Extracting key contributions from research papers
-* Searching global patent databases
-* Mapping the patent landscape
-* Identifying **white-space opportunities**
-* Drafting **USPTO-style patent claims**
+* Understanding research papers
+* Searching existing patents
+* Identifying unexplored areas (white-space)
+* Suggesting possible patent claims
 
-All of this happens through a single MCP-powered workflow.
+The entire workflow is automated and can be triggered through an MCP client like Claude Desktop.
 
 ---
 
-## ⚙️ Features
+## ✨ Key Features
 
-### 🔹 Paper Ingestion
+### 📥 Research Paper Processing
 
-* Parse PDFs (IEEE, ACM, etc.)
-* Fetch papers from arXiv
-* Extract structured sections
-* Deduplicate using SHA-256
+* Supports PDF and arXiv links
+* Extracts structured sections (abstract, methodology, etc.)
+* Identifies key technical contributions
 
-### 🔹 AI Understanding
+### 🤖 AI-Powered Analysis
 
-* Convert research into patent-style claims
-* IPC/CPC classification
-* Generate optimized search keywords
-* Session-based tracking
+* Converts research ideas into patent-style claims
+* Generates IPC/CPC classifications
+* Creates optimized search queries
 
-### 🔹 Patent Search
+### 🔍 Patent Search Engine
 
-* Multi-source search:
+* Searches across:
 
   * USPTO
   * EPO
   * Google Patents (fallback)
-* Async job processing with Celery
-* Redis caching (7-day TTL)
-* Deduplication across sources
+* Removes duplicate patents
+* Uses async processing for faster results
 
-### 🔹 (Upcoming)
+### 📊 (Work in Progress)
 
 * Patent landscape clustering
 * White-space detection using embeddings
-* Automated claim drafting
-* PDF report generation
+* Automated patent claim drafting
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture Overview
 
 ```
-MCP Client (Claude / Web UI)
-        │
-        ▼
- FastMCP Server (Python)
-        │
- ├── AI (Gemini)
+MCP Client (Claude Desktop / Web UI)
+            │
+            ▼
+     FastMCP Server (Python)
+            │
+ ├── AI Layer (Gemini)
  ├── Patent APIs (USPTO, EPO)
- ├── DB (PostgreSQL)
+ ├── Database (PostgreSQL)
  ├── Cache (Redis)
  └── Workers (Celery)
 ```
@@ -80,8 +75,8 @@ MCP Client (Claude / Web UI)
 * **Database:** PostgreSQL
 * **Vector DB:** Qdrant
 * **Cache:** Redis
-* **Async Jobs:** Celery
-* **PDF Parsing:** PyMuPDF, pdfplumber
+* **Queue:** Celery
+* **Parsing:** PyMuPDF, pdfplumber
 
 ---
 
@@ -91,21 +86,18 @@ MCP Client (Claude / Web UI)
 git clone https://github.com/Rajdeep003/patent-gap-finder.git
 cd patent-gap-finder
 
-# Install dependencies
 uv sync
-
-# Setup environment
 cp .env.example .env
 ```
 
 ---
 
-## 🔧 Configuration
+## ⚙️ Configuration
 
-Add required keys in `.env`:
+Update your `.env` file:
 
 ```env
-GEMINI_API_KEY=your_key
+GEMINI_API_KEY=AIzaSyCsrLKFANeJtDpONW7e6EqUmLdipgahddU
 DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/patent_gap_finder
 REDIS_URL=redis://localhost:6379/0
 QDRANT_URL=http://localhost:6333
@@ -113,32 +105,32 @@ QDRANT_URL=http://localhost:6333
 
 Optional:
 
-* EPO OPS credentials
+* EPO API credentials
 * SerpAPI key
 
 ---
 
 ## ▶️ Running the Project
 
-### Start services
+Start required services:
 
 ```bash
 docker compose up -d postgres redis qdrant
 ```
 
-### Initialize DB
+Initialize database:
 
 ```bash
 uv run python -m patent_gap_finder.db.init
 ```
 
-### Start worker
+Run Celery worker:
 
 ```bash
 uv run celery -A patent_gap_finder.workers.celery_app worker --loglevel=info
 ```
 
-### Run server
+Start the server:
 
 ```bash
 uv run python -m patent_gap_finder.server
@@ -146,16 +138,23 @@ uv run python -m patent_gap_finder.server
 
 ---
 
-## 🔌 MCP Integration (Claude Desktop)
+## 🔌 MCP Setup (Claude Desktop)
 
-Add to config:
+Add this to your config file:
 
 ```json
 {
   "mcpServers": {
     "patent-gap-finder": {
       "command": "uv",
-      "args": ["run", "python", "-m", "patent_gap_finder.server"]
+      "args": [
+        "--directory",
+        "/path/to/patent-gap-finder",
+        "run",
+        "python",
+        "-m",
+        "patent_gap_finder.server"
+      ]
     }
   }
 }
@@ -163,7 +162,7 @@ Add to config:
 
 ---
 
-## 💡 Usage Example
+## 💡 Example Usage
 
 **Input:**
 
@@ -176,8 +175,8 @@ https://arxiv.org/abs/2301.07041
 
 * Extracted claims
 * Patent search results
-* White-space opportunities
-* Draft patent claims
+* Identified innovation gaps
+* Suggested patent claims
 
 ---
 
@@ -215,30 +214,31 @@ docker compose up
 
 ### Production
 
-* Deploy on Railway / Docker
-* Add PostgreSQL + Redis + Qdrant services
+* Deploy using Docker / Railway
+* Add PostgreSQL, Redis, and Qdrant services
 
 ---
 
-## 📊 Free Tier Limits
+## 📊 Free Tier Usage
 
-| Service | Limit         |
-| ------- | ------------- |
-| Gemini  | 1500 req/day  |
-| EPO     | ~2000 req/day |
-| SerpAPI | 100/month     |
+* Gemini: ~1500 requests/day
+* EPO: ~2000 requests/day
+* SerpAPI: 100/month
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork repo
-2. Create branch
-3. Add changes + tests
-4. Submit PR
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a pull request
 
 ---
 
 ## 📜 License
 
 MIT License
+

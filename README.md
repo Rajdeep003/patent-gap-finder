@@ -88,7 +88,7 @@ MCP Client (Claude / Web UI)
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/patent-gap-finder.git
+git clone https://github.com/Rajdeep003/patent-gap-finder.git
 cd patent-gap-finder
 
 # Install dependencies

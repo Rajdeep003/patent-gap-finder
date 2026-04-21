@@ -97,7 +97,7 @@ cp .env.example .env
 Update your `.env` file:
 
 ```env
-GEMINI_API_KEY=AIzaSyCsrLKFANeJtDpONW7e6EqUmLdipgahddU
+GEMINI_API_KEY=Your_API
 DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/patent_gap_finder
 REDIS_URL=redis://localhost:6379/0
 QDRANT_URL=http://localhost:6333

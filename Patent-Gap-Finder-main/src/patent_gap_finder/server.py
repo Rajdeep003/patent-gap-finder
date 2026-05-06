@@ -529,7 +529,9 @@ def main() -> None:
         uvicorn.run(app, host=host, port=port, log_level="info")
     else:
         mcp.run(transport="stdio")
-
+@mcp.custom_route("/ping", methods=["GET"])
+async def ping(request):
+    return {"message": "Server is working 🚀"}
 
 if __name__ == "__main__":
     main()

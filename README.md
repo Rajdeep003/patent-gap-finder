@@ -241,4 +241,5 @@ Contributions are welcome!
 ## 📜 License
 
 MIT License
+Project updated
 
